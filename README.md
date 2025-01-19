@@ -1,4 +1,4 @@
-# Vam vam studios Game Engine (WIP)
+# CPU Renderer Game Engine (WIP)
 currently used for studying purposes
 
 # Compiling and executing:
