@@ -23,23 +23,25 @@ struct Entity_t {
 
         // ifstream is RAII (auto destroyed when out of scope)
         try {
-            std::ifstream file(pngFile.data(), std::ios::binary);                   // using ifstream, "input file stream". C++ way of opening files. Because the file we want to open is a png and not a text file, we use ios::binary to get the bytes of the image
+			// using ifstream, "input file stream". C++ way of opening files. 
+			// Because the file we want to open is a png and not a text file, 
+			// we use ios::binary to get the bytes of the image
+            std::ifstream file(pngFile.data(), std::ios::binary);
 
             std::vector<unsigned char> fileVector (
-                std::istreambuf_iterator<char> { file },                            // begin iterator
-                std::istreambuf_iterator<char> { }                                  // end iterator (istreambuf_iterator default constructor points to the end of the stream, aka "eof" (end of file))
+                std::istreambuf_iterator<char> { file }, // begin iterator
+                std::istreambuf_iterator<char> { } // end iterator (istreambuf_iterator default constructor points to the end of the stream, aka "eof" (end of file))
             );
             //                              same as "&fileVector[0]"
             decodePNG(pngPixels, outWidth, outHeight, fileVector.data(), fileVector.size());
-            //       |  ^   out      ^    puts   ^   |
-
+            //       ^            outputs           ^
 
             // Initialize entity using the decodePNG() outputs
             Name = pngFile.data();
-            Width = outWidth; 
+            Width = outWidth;
             Height = outHeight;
 
-            Sprite.reserve(pngPixels.size() / 4);                                    // From uint32_t vector size to char vector size
+            Sprite.reserve(pngPixels.size() / 4); // From uint32_t vector size to char vector size
             for (auto pngPixel = pngPixels.begin(); pngPixel != pngPixels.end(); pngPixel += 4) {
                 uint32_t spritePixel =
                       static_cast<uint32_t> (*(pngPixel + 0)) << 16     // G

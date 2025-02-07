@@ -38,13 +38,15 @@ LIBS    := libs/picoPNG/libPicoPNG.a libs/tinyPTC/libTinyPTC.a
 LIBSDIR := libs
 INCDIRS := -I$(SRC) -I$(LIBSDIR)
 
-ifdef RELEASE 			#Activar optimizaciones si game es una release (uso: make RELEASE=1) 
+# Activar optimizaciones si game es una release (uso: make RELEASE=1) 
+# Activate optimizations if game is a release (usage: make RELEASE=1)
+ifdef RELEASE 			
 	CCFLAGS += -O1
 else
 	CCFLAGS += -g
 endif
 
-# % = * (cualquier cosa)
+# % = * (anything)
 ALLCPPS    := $(shell     find src/ -iname *.cpp)
 ALLCS      := $(shell 	  find src/ -iname *.c)
 ALLOBJ     := $(foreach   F,$(ALLCPPS) $(ALLCS),$(call C2O,$(F)))
@@ -54,13 +56,14 @@ OBJSUBDIRS := $(patsubst  $(SRC)%,$(OBJ)%,$(SUBDIRS))
 .PHONY: info libs libs-clean libs-cleanall
 
 # APP Depende de los subdirectorios de obj y src/main.cpp
+# App Depends on the subdirectories of obj and src/main.cpp
 $(APP) : $(OBJSUBDIRS) $(ALLOBJ)
 # Linkear
 	$(CC) -o $(APP) $(ALLOBJ) $(LIBS)
 
 
-# $@ = %.0 (producto esperado)
-# $^ = %.c (dependencia)
+# $@ = %.0 (producto esperado) (target)
+# $^ = %.c (dependencia) (dependency)
 
 # foreach var "F" = "file in ..."
 $(foreach F,$(ALLCPPS),$(eval $(call COMPILE,$(CC),$(call C2O,$(F)),$(F),$(call C2H,$(F)),$(CCFLAGS) $(INCDIRS))))
@@ -86,8 +89,8 @@ info:
 $(OBJSUBDIRS):
 	$(MKDIR) $(OBJSUBDIRS)
 
-# clean		: elimina *.o
-# cleanall	: eliminar *.o pero NO el ejecutable
+# clean		: elimina *.o (deletes all and executable)
+# cleanall	: eliminar *.o pero NO el ejecutable (deletes all but executable)
 
 
 ## CLEAN RULES
@@ -96,7 +99,7 @@ clean:
 
 clean-all: clean
 	$(RM) "./$(APP)"
-	
+
 ## LIB RULES
 libs:
 	$(MAKE) -C $(LIBDIR)
